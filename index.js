@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose';
 import cors from 'cors'
 import {module} from './routes/userRouts.js'
-
+ 
 const app = express();
 const PORT = 5000;
 
