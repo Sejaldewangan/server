@@ -36,3 +36,18 @@ return   res.json(usersByID)
   res.status(400).json({message:error.message})
 }  
 }
+
+
+
+
+export const updateUsers =async (req,res) => {
+  try {
+    const updateUser = await User.findByIdAndUpdate(req.params.id,req.body)
+    if (!updateUser) {
+      return res.status(400).json({message:"user not found"})
+    }
+     return res.json(updateUser)
+  } catch (error) {
+    res.status(400).json({message:error.message})
+  }
+}
