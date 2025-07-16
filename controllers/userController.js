@@ -22,3 +22,17 @@ export const readAllUsers = async (req,res) => {
     res.status(400).json({message:error.message})
   }
 }
+
+
+export const readUsersById = async (req,res) => {
+try {
+  const usersByID = await User.findById(req.params.id)
+  if (!usersByID) {
+    res.status(400).json({message:"user not found"})
+}
+return   res.json(usersByID)
+
+} catch (error) {
+  res.status(400).json({message:error.message})
+}  
+}
