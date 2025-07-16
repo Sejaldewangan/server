@@ -11,3 +11,14 @@ export const createUser = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+
+
+export const readAllUsers = async (req,res) => {
+  try {
+    const allusers =await User.find()
+    res.json(allusers)
+  } catch (error) {
+    res.status(400).json({message:error.message})
+  }
+}

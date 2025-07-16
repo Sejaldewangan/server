@@ -15,7 +15,7 @@ app.use("/demo", (req, res) => {
 });
 app.use("/api/create",router)
 app.use("/product",productRouter)
-mongoose.connect('mongodb://localhost:27017/create').then(
+mongoose.connect('mongodb://localhost:27017/cruddb').then(
 console.log("mongoDB connected"),
   app.listen(port, () => {
     console.log(`server is runnning on port ${port} at /demo`);
