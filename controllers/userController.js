@@ -1,7 +1,4 @@
-
-import User from '../models/User.js'
-
-
+import User from "../models/User.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -12,58 +9,47 @@ export const createUser = async (req, res) => {
   }
 };
 
-
-
-export const readAllUsers = async (req,res) => {
+export const readAllUsers = async (req, res) => {
   try {
-    const allusers =await User.find()
-    res.json(allusers)
+    const allusers = await User.find();
+    res.json(allusers);
   } catch (error) {
-    res.status(400).json({message:error.message})
+    res.status(400).json({ message: error.message });
   }
-}
+};
 
-
-export const readUsersById = async (req,res) => {
-try {
-  const usersByID = await User.findById(req.params.id)
-  if (!usersByID) {
-    res.status(400).json({message:"user not found"})
-}
-return   res.json(usersByID)
-
-} catch (error) {
-  res.status(400).json({message:error.message})
-}  
-}
-
-
-
-
-export const updateUsers =async (req,res) => {
+export const readUsersById = async (req, res) => {
   try {
-    const updateUser = await User.findByIdAndUpdate(req.params.id,req.body)
-    if (!updateUser) {
-      return res.status(400).json({message:"user not found"})
+    const usersByID = await User.findById(req.params.id);
+    if (!usersByID) {
+      res.status(400).json({ message: "user not found" });
     }
-     return res.json(updateUser)
+    return res.json(usersByID);
   } catch (error) {
-    res.status(400).json({message:error.message})
+    res.status(400).json({ message: error.message });
   }
-}
+};
 
-
-
-
-
-export const deleteUser = async (req,res) => {
+export const updateUsers = async (req, res) => {
   try {
-    const delUser = await User.findByIdAndDelete(req.params.id,req.body)
-   if (!delUser) {
-    res.json({message:"User not found"})
-   }
-   return res.json("user deleted succesfully")
+    const updateUser = await User.findByIdAndUpdate(req.params.id, req.body);
+    if (!updateUser) {
+      return res.status(400).json({ message: "user not found" });
+    }
+    return res.json(updateUser);
   } catch (error) {
-    res.status(400).json({message:error.message})
+    res.status(400).json({ message: error.message });
   }
-}
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const delUser = await User.findByIdAndDelete(req.params.id, req.body);
+    if (!delUser) {
+      res.json({ message: "User not found" });
+    }
+    return res.json("user deleted succesfully");
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
