@@ -1801,3 +1801,16 @@ export const data ={
   "skip": 0,
   "limit": 30
 }
+ 
+export  const students = [
+  { name: "Aarav Sharma", class: "10A", personality: "Curious and hardworking" },
+  { name: "Priya Mehta", class: "9B", personality: "Creative and cheerful" },
+  { name: "Rohan Verma", class: "8C", personality: "Quiet but observant" },
+  { name: "Simran Kaur", class: "10B", personality: "Confident and outspoken" },
+  { name: "Aditya Patel", class: "7A", personality: "Energetic and playful" },
+  { name: "Neha Gupta", class: "9A", personality: "Disciplined and responsible" },
+  { name: "Kabir Singh", class: "8B", personality: "Friendly and social" },
+  { name: "Ishita Roy", class: "7C", personality: "Calm and thoughtful" },
+  { name: "Vikram Joshi", class: "10C", personality: "Competitive and ambitious" },
+  { name: "Ananya Nair", class: "9C", personality: "Helpful and empathetic" }
+];

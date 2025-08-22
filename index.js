@@ -2,7 +2,7 @@
 
 import express from "express";
 import cors from "cors";
-import { data } from "./data.js";
+import { data, students } from "./data.js";
 import mongoose from "mongoose";
 import router from "./routes/userRoute.js"
 import productRouter from "./routes/productRoute.js";
@@ -13,6 +13,9 @@ app.use(cors());
 app.use("/demo", (req, res) => {
   res.send("hi it is working");
 });
+app.use("/api/data/students",(req,res)=>{
+  res.json(students)
+})
 app.use("/api/create",router)
 app.use("/product",productRouter)
 mongoose.connect('mongodb://localhost:27017/cruddb').then(
