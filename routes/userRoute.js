@@ -6,7 +6,7 @@ import {
   readUsersById,
   updateUsers,
 } from "../controllers/userController.js";
-import { login, signin } from "../controllers/signup/login.js";
+import { login, signin } from "../controllers/auth/auth.js";
 const router = Routes();
 
 router.post("/signin", signin);

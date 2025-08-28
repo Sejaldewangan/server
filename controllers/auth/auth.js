@@ -1,5 +1,6 @@
 import User from "../../models/userModel.js";
-
+import jwt from  'jsonwebtoken'
+import cookieparser from 'cookieparser'
 import bcrypt from "bcryptjs";
 
 export const signin = async (req, res) => {
@@ -57,12 +58,17 @@ export const login = async (req, res) => {
     console.log(password);
     
      const isMatch = await bcrypt.compare(password, user.password);
-
+const payload = {_id:user._id,
+  name:user.name,
+  email:user.email
+}
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     } 
         else {
-      res.status(201).json({ message: "logged in successfully",user });
+          const token = jwt.sign(process.env.JWT_SECRATE,payload,{expiresIn:"10d"})
+      res.status(201).json({ message: "logged in successfully",user }).cookie(token)
+
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
