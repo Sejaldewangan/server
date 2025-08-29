@@ -54,12 +54,13 @@ export const login = async (req, res) => {
     }
 
     // Compare password
-    console.log("Secret:", process.env.JWT_SECRET);
-    const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Secret:", process.env.JWT_SECRATE);
+    const isMatch = await bcrypt.compare(user.password,password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+       return res.status(401).json({ message: "Invalid credentials" })
     }
-    
+    // else{
+    // }
     // JWT payload
     const payload = {
       _id: user._id,
