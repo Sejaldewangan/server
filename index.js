@@ -6,7 +6,10 @@ import { data, students } from "./data.js";
 import mongoose from "mongoose";
 import router from "./routes/userRoute.js"
 import productRouter from "./routes/productRoute.js";
-// import { adminR } from "./routes/adminRoutes.js";
+import { aR } from "./routes/adminRoutes.js";
+import dotenv from "dotenv";
+
+dotenv.config()
 const app = express();
 const port = 6969;
 app.use(express.json());
@@ -19,7 +22,7 @@ app.get("/api/data/students",(req,res)=>{
 })
 app.use("/api/create",router)
 app.use("/product",productRouter)
-// app.use("/api/v1",adminR)
+app.use("/api/v1",aR)
 mongoose.connect('mongodb://localhost:27017/cruddb').then(
 console.log("mongoDB connected"),
   app.listen(port, () => {

@@ -12,7 +12,7 @@ const router = Routes();
 router.post("/signin", signin);
 router.post("/login", login);
 
-router.post("/", createUser);
+router.post("/", signin);
 router.get("/get", readAllUsers);
 router.get("/getById/:id", readUsersById);
 router.put("/put/:id", updateUsers);

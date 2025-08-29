@@ -1,23 +1,32 @@
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-// export const authenticateToken = (req, res, next) => {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
+export function authenticateCheck(req, res, next) {
+  try {
+    // get auth header
+    const authHeader = req.headers["authorization"];
 
-//   if (!token) return res.sendStatus(401);
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Token missing or invalid",
+      });
+    }
 
-//   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403);
-//     req.user = user;
-//     next();
-//   });
-// };
+    // extract token
+    const token = authHeader.split(" ")[1];
 
-// export const authorizeRole = (role) => {
-//   return (req, res, next) => {
-//     if (req.user.role !== role) {
-//       return res.status(403).json({ message: "Forbidden: Access Denied" });
-//     }
-//     next();
-//   };
-// };
+    // verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // attach user to request
+    req.user = decoded;
+
+    next();
+  } catch (error) {
+    return res.status(403).json({
+      success: false,
+      message: "Invalid or expired token",
+      error: error.message,
+    });
+  }
+}

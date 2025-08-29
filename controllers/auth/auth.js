@@ -1,76 +1,90 @@
 import User from "../../models/userModel.js";
-import jwt from  'jsonwebtoken'
-import cookieparser from 'cookieparser'
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import dotenv from 'dotenv'
 
+dotenv.config()
 export const signin = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+
     if (!name || !email || !password || !role) {
-      res.json({ message: "please fill all the detailes" });
-      return;
-    }
-    const user = await User.findOne({ email });
-
-    if (user) {
-      res.status(403).json({ message: "user already exsists" });
-      return;
+      return res.status(400).json({ message: "Please fill all the details" });
     }
 
-    let hashedPassword;
-    try {
-      const salt = await bcrypt.genSalt(10);
-      hashedPassword =await bcrypt.hash(password, salt);
-      const users = await User.create({
-        name,
-        email,
-        password: hashedPassword,
-        role,
-      });
-
-      console.log(hashedPassword);
-      
-
-      return res.status(201).json({ users });
-    } catch (error) {
-      res.json({ message: error.message });
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(403).json({ message: "User already exists" });
     }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create user
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    return res.status(201).json({
+      message: "User registered successfully",
+      data: { id: user._id, name: user.name, email: user.email, role: user.role },
+    });
   } catch (error) {
-    return res.status(400).json({ message: "error in hashingpasword" });
+    return res.status(500).json({ message: error.message });
   }
-  console.log(hashedPassword);
 };
 
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    if (!email || !password) {
-        res.status(400).json({ message: "Please Fill out all theb detailes" });
-        return;
-    }
-    let user = await User.findOne({ email });
-    if (!user) {
-        res.status(404).json({ message: "User does not recognized " });
-        return;
-    }
-    console.log(req.body.password);
-    console.log(password);
-    
-     const isMatch = await bcrypt.compare(password, user.password);
-const payload = {_id:user._id,
-  name:user.name,
-  email:user.email
-}
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    } 
-        else {
-          const token = jwt.sign(process.env.JWT_SECRATE,payload,{expiresIn:"10d"})
-      res.status(201).json({ message: "logged in successfully",user }).cookie(token)
 
+    if (!email || !password) {
+      return res.status(400).json({ message: "Please fill all the details" });
     }
+
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not recognized" });
+    }
+
+    // Compare password
+    console.log("Secret:", process.env.JWT_SECRET);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    
+    // JWT payload
+    const payload = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+    console.log("Payload:", payload);
+
+const key = process.env.JWT_SECRATE
+
+
+    // Generate JWT
+    const token = jwt.sign(payload,key,{ expiresIn: "10d" });
+
+    // Send token in cookie + response
+    res
+      .cookie("authToken", token, { httpOnly: true, secure: false }) 
+      .status(200)
+      .json({
+        message: "Logged in successfully",
+        token,
+        user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

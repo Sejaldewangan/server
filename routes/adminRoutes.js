@@ -1,6 +1,8 @@
-// import { Router } from "express";
-// import { authenticateToken, authorizeRole } from "../middlewares/authMiddleware.js";
+import { authenticateCheck } from "../middlewares/authMiddleware.js";
+import Router from 'express'
 
-// export const adminR= Router()
+export  const aR = Router()
 
-// adminR.get("/admin", authenticateToken, authorizeRole("admin"), getAdmin);
+aR.get("/test",authenticateCheck,(req,res)=>{
+    res.json("test is ok ,so good")
+})
